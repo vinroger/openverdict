@@ -1,0 +1,19 @@
+# Stage 3, round 1 — RL (RLOO) at a 64-token thinking budget, reward = right answer only.
+base_model: Qwen/Qwen3.5-4B
+init_adapter: checkpoints/stage2/step-000927
+rl_train_file: data/rl_train.jsonl         # questions with a pass rate of 1/4 to 3/4 (python -m train.rft filter); others give no learning signal
+replay_file: data/replay.jsonl             # direct-answer questions from earlier stages
+output_dir: checkpoints/rl_round1
+lora: {rank: 32, alpha: 64}
+dtype: float32
+budget: 64
+completion_bonus: 0.0
+rollouts_per_question: 4
+batch_size: 4                              # questions per update (16 rollouts)
+kl_coef: 0.001                             # KL to the adapter frozen at the start of RL
+replay_weight: 0.25
+learning_rate: 5.0e-6
+updates: 160
+clip_norm: 1.0
+save_every: 20
+seed: 17

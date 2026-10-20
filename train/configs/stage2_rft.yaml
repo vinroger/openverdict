@@ -1,0 +1,33 @@
+# Stage 2 — rejection-sampling fine-tuning on the shortest correct CoT.
+# 1) python -m train.rft sample --config train/configs/stage2_rft.yaml   (writes output_dir/samples.jsonl)
+# 2) python -m train.rft select --config train/configs/stage2_rft.yaml   (writes output_dir/rft_train.jsonl)
+# 3) python -m train.sft        --config train/configs/stage2_rft.yaml   (trains on rft_train.jsonl)
+# We ran two rounds; the second round sampled in three prompt styles and is the one this config reproduces.
+base_model: Qwen/Qwen3.5-4B
+questions_file: data/stage2_questions.jsonl  # questions with one right answer
+init_adapter: checkpoints/stage1/step-006609
+output_dir: checkpoints/stage2
+sampling:
+  styles: [own, symbolic, draft]           # see openverdict/prompts.py STYLE_INSTRUCTIONS
+  samples: 4                               # per question and style
+  budget: 64                               # thinking budget while sampling
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 20
+  seed: 17
+selection:
+  truncated_cot_lengths: [16, 32]          # extra examples that train the answer after a CoT cut at 16 / 32 tokens
+# SFT on the selected rows:
+train_file: checkpoints/stage2/rft_train.jsonl
+lora:
+  rank: 16
+  alpha: 32
+  widen_to: {rank: 32, alpha: 64}          # alpha / rank stays 2, so the model output is unchanged by the widening
+dtype: float32
+learning_rate: 2.0e-5
+batch_size: 8
+epochs: 1
+final_lr_fraction: 0.1
+clip_norm: 1.0
+save_every: 500
+seed: 17

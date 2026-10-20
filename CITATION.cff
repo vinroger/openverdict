@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use OpenVerdict, please cite it as below."
+title: "OpenVerdict: A 4B Decision Model with an 80-Token Thinking Budget"
+authors:
+  - family-names: Kuswara
+    given-names: Vincentius Roger
+    email: vincentiusrogerk@gmail.com
+year: 2026
+license: Apache-2.0
+type: software

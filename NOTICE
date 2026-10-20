@@ -1,0 +1,6 @@
+OpenVerdict
+Copyright 2026 Vincentius Roger Kuswara
+
+This project fine-tunes a LoRA adapter on top of the Qwen3.5-4B base model (https://huggingface.co/Qwen/Qwen3.5-4B),
+which is released under the Apache License, Version 2.0. The base model weights are not included in this repository;
+they are downloaded from their original location at run time.

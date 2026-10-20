@@ -1,0 +1,22 @@
+# Stage 3, round 2 — RL at an 80-token thinking budget with the completion bonus (beta = 0.25).
+# Before training at a new budget, evaluate the round-1 model at that budget with no training: for us the larger budget alone
+# explained most of the gain, and RL then made the CoT shorter again.
+base_model: Qwen/Qwen3.5-4B
+init_adapter: checkpoints/rl_round1/step-000160
+reference_adapter: checkpoints/stage2/step-000927   # the KL reference stays the policy at the start of round 1
+rl_train_file: data/rl_train_round2.jsonl  # new questions; ours mixed text and image questions (37% images)
+replay_file: data/replay.jsonl
+output_dir: checkpoints/rl_round2
+lora: {rank: 32, alpha: 64}
+dtype: float32
+budget: 80
+completion_bonus: 0.25                     # 0 / 0.25 / 0.5 compared in the technical report
+rollouts_per_question: 4
+batch_size: 4
+kl_coef: 0.001
+replay_weight: 0.25
+learning_rate: 5.0e-6
+updates: 80
+clip_norm: 1.0
+save_every: 20
+seed: 19

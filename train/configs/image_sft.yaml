@@ -1,0 +1,17 @@
+# A short final SFT round on images (after RL), for image tasks that were still weak; part of the questions with a CoT (same trainer and loss as stage 2).
+base_model: Qwen/Qwen3.5-4B
+train_file: data/image_train.jsonl
+image_root: data/images
+max_pixels: 262144                         # a case may set its own "max_pixels" on its images
+init_adapter: checkpoints/rl_round2/step-000080
+output_dir: checkpoints/image_sft
+lora: {rank: 32, alpha: 64}
+dtype: float32
+learning_rate: 1.0e-5
+batch_size: 8
+updates: 348
+warmup_updates: 17
+final_lr_fraction: 0.1
+clip_norm: 1.0
+save_every: 100
+seed: 17

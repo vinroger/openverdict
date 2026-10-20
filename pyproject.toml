@@ -1,0 +1,29 @@
+[project]
+name = "openverdict"
+version = "1.0.0"
+description = "A 4B decision model with a non-thinking mode and an 80-token thinking mode: inference, training recipe and evaluation."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.8",
+    "torchvision>=0.23",
+    "transformers>=5.12",
+    "safetensors>=0.4",
+    "pillow>=10",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+examples = ["datasets>=3"]
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["openverdict"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

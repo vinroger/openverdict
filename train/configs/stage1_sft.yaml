@@ -1,0 +1,17 @@
+# Stage 1 — supervised fine-tuning on the decision format (direct answers only).
+# The released model used about 53k questions; 6,609 updates of 8 questions is one epoch.
+base_model: Qwen/Qwen3.5-4B
+train_file: data/stage1_train.jsonl        # your data, in the format of data/FORMAT.md
+output_dir: checkpoints/stage1
+lora: {rank: 16, alpha: 32}                # widened to rank 32 at the start of stage 2 (same function, more capacity)
+dtype: float32                             # float32 weights with TF32 matmuls on CUDA
+learning_rate: 5.0e-5
+weight_decay: 0.01
+batch_size: 8
+updates: 6609
+warmup_updates: 330
+final_lr_fraction: 0.1                     # linear decay to 10% of the peak
+clip_norm: 1.0
+save_every: 1000
+seed: 81
+# Per-question "weight" fields scale the loss; we weighted harder questions up (e.g. easy 0.6, standard 0.8, hard 1.5).
